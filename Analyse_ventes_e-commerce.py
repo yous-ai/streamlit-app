@@ -53,7 +53,7 @@ if uploaded_file is not None:
                 st.warning("⚠️ La colonne sélectionnée ne contient pas de dates valides.")
                 données_modifiées = data
         else:
-            données modifiées = data
+            données_modifiées = data
 
     
     if st.button("Générer le graphique"):
