@@ -33,14 +33,8 @@ if uploaded_file is not None:
     données_modifiées = data
     modification=0
 
-    if st.button("Générer le graphique"):
-        if not données_modifiées.empty:
-            fig = px.bar(données_modifiées, x=column, title=f"Distribution de {column} pour {date}")
-            st.plotly_chart(fig)
-        else:
-            st.warning('Aucune donnée trouvée pour cette date')
-    
     filter_par_date = st.checkbox("Filter par date")
+    
     if filter_par_date:
         date_column = st.selectbox('Sélectionner la colonne qui correspond au date', data.columns)
         data[date_column] = pd.to_datetime(data[date_column], errors="coerce").dt.date
@@ -52,8 +46,15 @@ if uploaded_file is not None:
             modification += 1
         else:
             st.warning("⚠️ La colonne sélectionnée ne contient pas de dates valides.")
-        
-
+    
+    if st.button("Générer le graphique"):
+        if not données_modifiées.empty:
+            fig = px.bar(données_modifiées, x=column, title=f"Distribution de {column}")
+            st.plotly_chart(fig)
+        else:
+            st.warning('Aucune donnée trouvée pour cette date')
+    
+    
 
 #Section 4 : Enregistrement des données
 st.subheader("Téléchargement des données")
