@@ -33,31 +33,29 @@ if uploaded_file is not None:
 
     #Initialisation
     modification=0
+    filter_par_date = st.checkbox("Filter par date")
 
-    date_column = st.selectbox('Sélectionner la colonne qui correspond au date', data.columns)
-    date = st.date_input("Choisissez un date")
+    if filter_par_date:
+        date_column = st.selectbox('Sélectionner la colonne qui correspond au date', data.columns)
+        date = st.date_input("Choisissez un date")
 
-    if date_column:
-        data[date_column] = pd.to_datetime(data[date_column], errors="coerce").dt.date
-        date = pd.to_datetime(date)
+        if date_column:
+            data[date_column] = pd.to_datetime(data[date_column], errors="coerce").dt.date
+            date = pd.to_datetime(date)
 
-        if not data[date_column].isna().all():
-            if date is not None:
-                données_modifiées = data.loc[data[date_column] == date]
-                modification += 1
+            if not data[date_column].isna().all():
+                if date is not None:
+                    données_modifiées = data.loc[data[date_column] == date]
+                    modification += 1
+                else:
+                    données_modifiées = data
             else:
+                st.warning("⚠️ La colonne sélectionnée ne contient pas de dates valides.")
                 données_modifiées = data
         else:
-            st.warning("⚠️ La colonne sélectionnée ne contient pas de dates valides.")
-            données_modifiées = data
+            données modifiées = data
 
-    if date and date_column:
-        data[date_column] = pd.to_datetime(data[date_column])
-        date = pd.to_datetime(date)
-        données_modifiées = data.loc[data[date_column] == date]
-    else:
-        données_modifiées = data
-
+    
     if st.button("Générer le graphique"):
             if not données_modifiées.empty:
                 fig = px.bar(données_modifiées, x=column, title=f"Distribution de {column} pour {date}")
