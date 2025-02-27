@@ -35,6 +35,15 @@ if uploaded_file is not None:
 
     filter_par_date = st.checkbox("Filter par date")
     
+    def convertir_date(date_series):
+        formats = ["%Y-%m-%d", "%d-%m-%Y", "%m-%d-%Y", "%Y/%m/%d", "%d/%m/%Y", "%m/%d/%Y"]
+        for fmt in formats:
+            try:
+                return pd.to_datetime(date_series, format=fmt, errors="coerce").dt.date
+            except Exception:
+                pass
+        return pd.NaT
+    
     if filter_par_date:
         date_column = st.selectbox('Sélectionner la colonne qui correspond au date', data.columns)
         data[date_column] = pd.to_datetime(data[date_column], errors="coerce").dt.date
