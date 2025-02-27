@@ -17,7 +17,7 @@ else:
         data = pd.read_csv(uploading_file, encoding="utf-8")
     except UnicodeDecodeError:
         print("UTF-8 ne fonctionne pas, essayons Latin-1...")
-        df = pd.read_csv(uploading_file, encoding="ISO-8859-1") 
+        data = pd.read_csv(uploading_file, encoding="ISO-8859-1") 
     st.write("Aperçu des données : ", data.head())
 
 #Section 2 : Exploration des données
