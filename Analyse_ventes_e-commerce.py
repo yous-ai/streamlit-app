@@ -14,10 +14,10 @@ if uploaded_file is None:
 else:
     # Essayer UTF-8
     try:
-        data = pd.read_csv(uploaded_file, encoding="utf-8")
+        data = pd.read_csv(uploaded_file, encoding="utf-8", header=0)
     except UnicodeDecodeError:
         print("UTF-8 ne fonctionne pas, essayons Latin-1...")
-        data = pd.read_csv(uploaded_file, encoding="ISO-8859-1") 
+        data = pd.read_csv(uploaded_file, encoding="ISO-8859-1", header=0) 
     st.write("Aperçu des données : ", data.head())
 
 #Section 2 : Exploration des données
