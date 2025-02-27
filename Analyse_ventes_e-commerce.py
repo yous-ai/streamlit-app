@@ -32,31 +32,28 @@ if uploaded_file is not None:
     column = st.selectbox("Sélectionner une colonne pour le graphique", data.columns)
     données_modifiées = data
     modification=0
-    
-    filter_par_date = st.checkbox("Filter par date")
-    if filter_par_date:
-        date_column = st.selectbox('Sélectionner la colonne qui correspond au date', data.columns)
-        date = st.date_input("Choisissez un date")
 
-        if date_column:
-            data[date_column] = pd.to_datetime(data[date_column], errors="coerce").dt.date
-            date = pd.to_datetime(date)
-
-            if not data[date_column].isna().all() and date is not None:
-                if date is not None:
-                    données_modifiées = data.loc[data[date_column] == date]
-                    modification += 1
-                else:
-                    st.warning("⚠️ La colonne sélectionnée ne contient pas de dates valides.")
-            
     if st.button("Générer le graphique"):
         if not données_modifiées.empty:
             fig = px.bar(données_modifiées, x=column, title=f"Distribution de {column} pour {date}")
             st.plotly_chart(fig)
         else:
             st.warning('Aucune donnée trouvée pour cette date')
-
+    
+    filter_par_date = st.checkbox("Filter par date")
+    if filter_par_date:
+        date_column = st.selectbox('Sélectionner la colonne qui correspond au date', data.columns)
+        data[date_column] = pd.to_datetime(data[date_column], errors="coerce").dt.date
+        date = st.date_input("Choisissez un date")
+        date = pd.to_datetime(date)   
         
+        if not data[date_column].isna().all():
+            données_modifiées = data.loc[data[date_column] == date]
+            modification += 1
+        else:
+            st.warning("⚠️ La colonne sélectionnée ne contient pas de dates valides.")
+        
+
 
 #Section 4 : Enregistrement des données
 st.subheader("Téléchargement des données")
