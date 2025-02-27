@@ -30,11 +30,10 @@ if uploaded_file is not None:
 st.subheader("Visualisation des données")
 if uploaded_file is not None:
     column = st.selectbox("Sélectionner une colonne pour le graphique", data.columns)
-
-    #Initialisation
+    données_modifiées = data
     modification=0
+    
     filter_par_date = st.checkbox("Filter par date")
-
     if filter_par_date:
         date_column = st.selectbox('Sélectionner la colonne qui correspond au date', data.columns)
         date = st.date_input("Choisissez un date")
@@ -43,25 +42,21 @@ if uploaded_file is not None:
             data[date_column] = pd.to_datetime(data[date_column], errors="coerce").dt.date
             date = pd.to_datetime(date)
 
-            if not data[date_column].isna().all():
+            if not data[date_column].isna().all() and date is not None:
                 if date is not None:
                     données_modifiées = data.loc[data[date_column] == date]
                     modification += 1
                 else:
-                    données_modifiées = data
-            else:
-                st.warning("⚠️ La colonne sélectionnée ne contient pas de dates valides.")
-                données_modifiées = data
+                    st.warning("⚠️ La colonne sélectionnée ne contient pas de dates valides.")
+            
+    if st.button("Générer le graphique"):
+        if not données_modifiées.empty:
+            fig = px.bar(données_modifiées, x=column, title=f"Distribution de {column} pour {date}")
+            st.plotly_chart(fig)
         else:
-            données_modifiées = data
+            st.warning('Aucune donnée trouvée pour cette date')
 
         
-        if st.button("Générer le graphique"):
-                if not données_modifiées.empty:
-                    fig = px.bar(données_modifiées, x=column, title=f"Distribution de {column} pour {date}")
-                    st.plotly_chart(fig)
-                else:
-                    st.warning('Aucune donnée trouvée pour cette date')
 
 #Section 4 : Enregistrement des données
 st.subheader("Téléchargement des données")
@@ -69,4 +64,4 @@ if uploaded_file is not None:
     if modification == 1:
         st.download_button("Télécharger avec la date sélectionnée", data.to_csv(index=False), "data_modifiées.csv")
     else:
-        st.download_button("Télécharger les données initiale", data.to_csv(index=False), "data_modifiées.csv")
+        st.download_button("Télécharger les données initiales", data.to_csv(index=False), "data_modifiées.csv")
