@@ -8,10 +8,16 @@ st.markdown("Cette application permet d'explorer les données de ventes d'un sit
 
 #Section 1 : Omportation des données
 uploaded_file = st.file_uploader("Importer un fichier CSV", type="csv")
+
 if uploaded_file is None:
     st.warning('Veuillez importer un fichier pour continuer')
 else:
-    data = pd.read_csv(uploaded_file)
+    # Essayer UTF-8
+    try:
+        data = pd.read_csv(uploading_file, encoding="utf-8")
+    except UnicodeDecodeError:
+        print("UTF-8 ne fonctionne pas, essayons Latin-1...")
+        df = pd.read_csv(uploading_file, encoding="ISO-8859-1") 
     st.write("Aperçu des données : ", data.head())
 
 #Section 2 : Exploration des données
