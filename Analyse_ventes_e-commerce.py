@@ -55,13 +55,13 @@ if uploaded_file is not None:
         else:
             données_modifiées = data
 
-    
-    if st.button("Générer le graphique"):
-            if not données_modifiées.empty:
-                fig = px.bar(données_modifiées, x=column, title=f"Distribution de {column} pour {date}")
-                st.plotly_chart(fig)
-            else:
-                st.warning('Aucune donnée trouvée pour cette date')
+        
+        if st.button("Générer le graphique"):
+                if not données_modifiées.empty:
+                    fig = px.bar(données_modifiées, x=column, title=f"Distribution de {column} pour {date}")
+                    st.plotly_chart(fig)
+                else:
+                    st.warning('Aucune donnée trouvée pour cette date')
 
 #Section 4 : Enregistrement des données
 st.subheader("Téléchargement des données")
